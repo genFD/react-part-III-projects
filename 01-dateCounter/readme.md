@@ -34,7 +34,7 @@ In the **src/** folder :
 
 #### The useReducer hook
 
-The useReducer hook works with a function called `reducer`.
+<!-- The useReducer hook works with a function called `reducer`.
 It is a pure function that takes two arguments :
 
 1. The previous state
@@ -50,27 +50,29 @@ function reducer(state, action) {
 export function DateCounter() {
   const [count, dispatch] = useReducer(reducer, 0)
 }
-```
+``` -->
 
-First, we defined a function called `reducer` that takes two parameters `state` and `action`. Inside the body of the function we're printing the state and the action to the console.
+<!-- First, we defined a function called `reducer` that takes two parameters `state` and `action`. Inside the body of the function we're printing the state and the action to the console.
 
-Inside `DateCounter` we called `useReducer` which is a React Hook that lets you add the `reducer` function to your component.
+Inside `DateCounter` we called `useReducer` which is a React Hook that lets you add the `reducer` function to your component. -->
 
-`useReducer` takes three parameters :
+[`useReducer`](https://react.dev/reference/react/useReducer#dispatch) :
 
-1. `reducer`: The reducer function that specifies how the state gets updated. It must be pure, should take the state and action as arguments, and should return the next state. State and action can be of any types.
+- is a React Hook designed to manage complex state.
+
+- is usually called with two arguments :
+
+1. `reducer`: The reducer function specifies how the state gets updated. It must be pure, should take the state and action as arguments, and should return the next state. State and action can be of any types.
 
 2. `initialArg`: The value from which the initial state is calculated. It can be a value of any type.
 
-3. **optional** `init`: The initializer function that should return the initial state. If it’s not specified, the initial state is set to initialArg. Otherwise, the initial state is set to the result of calling init(initialArg)
+- returns an array with exactly two values :
 
-`useReducer` returns an array with exactly two values :
-
-1. The current state. During the first render, it’s set to `init(initialArg)` or `initialArg` (if there’s no `init`).
+1. The current state. During the first render, it’s set to `initialArg`.
 
 2. The `dispatch` function that lets you update the state to a different value and trigger a re-render.
 
-Let's call the `dispatch` function with `1` as an argument inside the `increment` function.
+In **app.jsx**, let's call `useReducer()` :
 
 ```jsx
 function reducer(state, action) {
@@ -78,36 +80,34 @@ function reducer(state, action) {
 }
 
 export function DateCounter() {
- ...
-}
-const inc = function () {
-   dispatch(1)
+  const [count, dispatch] = useReducer(reducer, 0)
+
+  const inc = function () {
+    dispatch(1)
+  }
 }
 ```
+
+- We called useReducer with a reducer function that logs to the console the the state and the action
+
+- We also called the dispatch function in the `inc` event handler, and we passed to it the number `1` as argument.
 
 In the browser, we should get this output :
 
 ![Console](../01-dateCounter/assets/console-.png)
 
-We can see that the state is `0` and the action is `1`. This is because the `reducer` function get access to the current state which is `0` :
+We can see that :
+
+- the state is `0` because the initialState was set to `0`
 
 ```jsx
-export function DateCounter() {
-  const [count, dispatch] = useReducer(reducer, 0)
-}
+const [count, dispatch] = useReducer(reducer, 0)
 ```
 
-and the `action`, which is the argument passed to the `dispatch` function :
+- the action is `1` because it is the argument passed to the `dispatch` function.
 
-```jsx
-const inc = function () {
-  dispatch(1)
-}
-```
-
-As mentionned above, the `reducer` takes the state and action as arguments, and return the next state.
-
-Let's try this :
+As mentionned above, the `reducer` function specifies how the state gets updated.
+If we wanted to update the current state (which is `0` at the moment) we can do this :
 
 ```jsx
 function reducer(state, action) {
@@ -117,16 +117,14 @@ function reducer(state, action) {
 ...
 ```
 
-When we clicked on the increment button, the counter was updated :
+When we click on the increment button, the counter should increment by 1 :
 
 ![increm](../01-dateCounter/assets/incrementbyone.gif)
 
-As we can see the reducer calculates the new state based on the action it receives.
+As we can see the reducer calculates the new state based on the action it receives from the `dispatch` function.
 The state was `0` and the action received was `1`, `0 + 1 = 1`, therefore `1` is rendered on the screen.
 
-Let's make our counter more useful.
-
-The dispatch function returned by `useReducer` lets you update the state to a different value and trigger a re-render.
+##### What is an action ?
 
 An `action` is usually a plain JavaScript object that represents an intention to change the state. Action objects usually have a `type` property with a user-defined string value that describes the action being taken. Optional properties can be added to the action object. One common property added is conventionally called `payload`, which is used to supply data necessary to perform the desired action.
 
@@ -136,7 +134,7 @@ In our example, we can define three actions:
 2. Decrement the counter
 3. Setting the counter
 
-Let's implement `increment`, `decrement` and `setCount`. It's very common to use a [switch statement](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch) to define the reducer logic :
+One common convention is to use a [switch statement](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch) to define the `reducer` logic :
 
 ```jsx
 function reducer(state, action) {
@@ -167,30 +165,35 @@ export function DateCounter() {
 }
 ```
 
-The counter should works as intended.
-
 Let's recap what happened here :
 
-- The `useReducer` hook takes two parameters : the `reducer` function and the `initialState` which is `0` in our example.
+- The `reducer` function takes the current state and the action object passed to the `dispatch` functions inside `inc`, `dec` and `defineCount` event handlers and calculates the next state.
 
-- The `reducer` function takes the current state and the action that we passed to the `dispatch` function and calculates the next state. In our example:
-  - when the action is `increment`, we increase the current state by `1`.
-  - when the action is `decrement`, we decrease the current state by `1`.
-  - when the action is `setCount`, we set the counter to the number entered by the user, which is saved in the `payload` property.
+In our example:
+
+- When the action's type is `increment`, we increase the current state by `1`.
+- When the action's type is `decrement`, we decrease the current state by `1`.
+- When the action's type is `setCount`, we set the counter to the number entered by the user, which is saved in the `payload` property.
 
 ![inc-dec-set](../01-dateCounter/assets/inc-dec-set.gif)
 
-#### Managing related pieces of state
+##### Managing related pieces of state
 
-The useReducer hook is commonly used to manage complex state.
-It provides a centralized container for state that is shared across your entire application, with rules ensuring that the state can only be updated in a predictable fashion using events called `actions`.
+The `useReducer()` hook allows us to have a centralized container for state that is shared across the entire application, with rules ensuring that the state can only be updated in a predictable fashion using events called `actions`.
 
-For our component DateCounter, we have two pieces of state :
+For our component `DateCounter`, we have two pieces of state :
 
 1. step
 2. count
 
-Let' put them in a separate object called `initialState` :
+```jsx
+export function DateCounter() {
+  const [count, setCount] = useState(0)
+  const [step, setStep] = useState(1)
+}
+```
+
+We can put these related pieces of state in a separate object called `initialState` :
 
 ```jsx
 const initialState = {
@@ -221,7 +224,7 @@ Now back to our reducer function, as mentionned above, reducers must follow cert
 
 These rules help improve useReducer’s scaleable and predictable state management. Some common behaviors to avoid inside reducers are network requests, generating random numbers, and using asynchronous functions.
 
-We can update the reducer function like so :
+We can update our reducer function like so :
 
 ```jsx
 function reducer(state, action) {
@@ -242,13 +245,14 @@ The counter still works exactly like before :
 
 ![counter](../01-dateCounter/assets/incrementbyone.gif)
 
-To comply with the second rule (performing an immutable update ) the `initialState` object’s contents was copied into a new object and only this copy is mutated. In Javascript, we can use the [spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to obtain copies of objects and arrays.
+To comply with the second rule (performing an immutable update ) the `initialState` object’s contents was copied into a new object and only this copy was mutated.
+In Javascript, we can use the [spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to obtain copies of objects and arrays.
 
 Next, let's try and implement the `step` feature.
 We want to be able to choose the number of steps our counter will increment or decrement.
 With our new reducer implementation, it's very easy:
 
-- Inside `defineStep()` event handler we can dispatch an action called `step` to capture the number of steps we will increment or decrement using the **event object**. the **value** will be saved in the `payload` property. We should also convert the **value** to a number using **Number()**:
+- Inside `defineStep()` event handler we can dispatch an action called `step` to capture the number of steps we will increment or decrement using the **event object**. The **value** will be saved in the `payload` property. We should also convert the **value** to a number using **Number()**:
 
 ```js
 const defineStep = function (e) {
@@ -284,7 +288,7 @@ function reducer(state, action) {
 
 The last feature to implement is `reset`. We want to be able to reset the counter to `0` and the number of steps to `1` :
 
-- we can accomplish this by dispatching an action called `reset` inside `reset()` event handler :
+- We can accomplish this by dispatching an action called `reset` inside `reset()` event handler :
 
 ```js
 const reset = function () {
