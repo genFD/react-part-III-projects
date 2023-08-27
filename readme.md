@@ -3,13 +3,10 @@
 - useReducer
 - Single page application (SPA)
 - Advance state management (context API)
-- Perfomance optim
+- Perfomance optimization
 - Redux
 
 ## useReducer
-
-- Transform countState to use useReducer
-- Explanation flow of data useReducer
 
 ## React Router and SPA
 
@@ -22,9 +19,3 @@
 - memo
 - useMemo
 - useCallback
-
-### Wasted renders
-
-### Bundle size
-
-### App speed/

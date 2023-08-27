@@ -14,11 +14,11 @@
 
 ## Project completed repo
 
-- check out the code here `->` [completed](https://github.com/hermkan/react-part-I-projects/tree/main/01-components-props-jsx/completed)
+- Source code here `->` [completed](https://github.com/hermkan/react-part-III-projects/tree/main/01-dateCounter/completed)
 
 ## Project starter repo
 
-- check out the code here `->` [starter](https://github.com/hermkan/react-part-I-projects/tree/main/01-components-props-jsx/starter)
+- Source code here `->` [starter](https://github.com/hermkan/react-part-III-projects/tree/main/01-dateCounter/starter)
 
 ## Learning Goal
 
