@@ -6,6 +6,7 @@
 - [⌛️ Project starter Repo](#project-starter-repo)
 - [🎯 Learning goal](#learning-goal)
 - [🔍 Code walkthrough](#code-walkthrough)
+
   - [App component](#app-component)
     - [App component](#app-component)
     - [The useReducer Hook](#the-usereducer-hook)
@@ -34,35 +35,13 @@ In the **src/** folder :
 
 #### The useReducer hook
 
-<!-- The useReducer hook works with a function called `reducer`.
-It is a pure function that takes two arguments :
-
-1. The previous state
-2. The action
-
-and returns the next state.
-
-```jsx
-function reducer(state, action) {
-  console.log(`state: ${state}`, `action: ${action}`)
-}
-
-export function DateCounter() {
-  const [count, dispatch] = useReducer(reducer, 0)
-}
-``` -->
-
-<!-- First, we defined a function called `reducer` that takes two parameters `state` and `action`. Inside the body of the function we're printing the state and the action to the console.
-
-Inside `DateCounter` we called `useReducer` which is a React Hook that lets you add the `reducer` function to your component. -->
-
 [`useReducer`](https://react.dev/reference/react/useReducer#dispatch) :
 
 - is a React Hook designed to manage complex state.
 
 - is usually called with two arguments :
 
-1. `reducer`: The reducer function specifies how the state gets updated. It must be pure, should take the state and action as arguments, and should return the next state. State and action can be of any types.
+1. `reducer`: The reducer function specifies how the state gets updated. It must be pure, should take the `state` and `action` as arguments, and should return the next state. State and action can be of any types.
 
 2. `initialArg`: The value from which the initial state is calculated. It can be a value of any type.
 
@@ -88,7 +67,7 @@ export function DateCounter() {
 }
 ```
 
-- We called useReducer with a reducer function that logs to the console the the state and the action
+- We called useReducer with a reducer function that logs to the console the the `state` and the `action` arguments.
 
 - We also called the dispatch function in the `inc` event handler, and we passed to it the number `1` as argument.
 
@@ -111,7 +90,6 @@ If we wanted to update the current state (which is `0` at the moment) we can do 
 
 ```jsx
 function reducer(state, action) {
-  console.log(`state: ${state}`, `action: ${action}`)
   return state + action
 }
 ...
@@ -124,7 +102,7 @@ When we click on the increment button, the counter should increment by 1 :
 As we can see the reducer calculates the new state based on the action it receives from the `dispatch` function.
 The state was `0` and the action received was `1`, `0 + 1 = 1`, therefore `1` is rendered on the screen.
 
-##### What is an action ?
+#### What is an action ?
 
 An `action` is usually a plain JavaScript object that represents an intention to change the state. Action objects usually have a `type` property with a user-defined string value that describes the action being taken. Optional properties can be added to the action object. One common property added is conventionally called `payload`, which is used to supply data necessary to perform the desired action.
 
@@ -164,8 +142,6 @@ export function DateCounter() {
   }
 }
 ```
-
-Let's recap what happened here :
 
 - The `reducer` function takes the current state and the action object passed to the `dispatch` functions inside `inc`, `dec` and `defineCount` event handlers and calculates the next state.
 
