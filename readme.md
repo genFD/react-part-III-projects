@@ -1,13 +1,22 @@
 # React - PART III
 
-- useReducer :
+## useReducer
 
-  - [Quiz App demo](demo) / [Quiz App repo](repolink)
+### Quiz App
 
-- React Router, context API, memo, useMemo, useCallback :
+- [Demo](demo)
+- [Repo](repolink)
 
-  - [WorldWise demo](demo) / [WorldWise repo](repo)
+## React Router, context API, memo, useMemo, useCallback
 
-- Redux and Redux toolkit :
+### WorldWise
 
-  - [Bank account demo](demo) / [Bank account repo](repo)
+- [Demo](demo)
+- [Repo](repo)
+
+## Redux and Redux toolkit
+
+### Bank account
+
+- [Demo](demo)
+- [Repo](repo)
