@@ -2,7 +2,7 @@
 
 ## Screenshots
 
-[Sccht](./completed/src/assets/appscreenshots.png)
+![Sccht](./completed/src/assets/appscreenshots.png)
 
 ## Table of contents
 
