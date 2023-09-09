@@ -1,5 +1,9 @@
 # Redux and redux toolkit
 
+## Screenshots
+
+[Sccht](./completed/src/assets/appscreenshots.png)
+
 ## Table of contents
 
 - [About redux](#about-redux)
