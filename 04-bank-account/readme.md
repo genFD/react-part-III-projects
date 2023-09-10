@@ -543,13 +543,15 @@ import { useSelector } from 'react-redux'
 
 ```jsx
 //within the component defintion
-const customer = useSelector((store) => store.customer)
-console.log(customer)
+const customerName = useSelector((store) => store.customer.fullName)
+console.log(customerName)
+
+// In the return statement
+
+return <h2>👋 Welcome,{customerName}</h2>
 ```
 
-Printing the variable `customer` allows us to see the customer state object in the store:
-
-![customerState](./completed/src/assets/customerState.png)
+Printing the variable `customerName` allows us to see the customer's name in the store. At the moment, it's only an empty string. In order to display the customer's name we need to learn how to dispacth an action.
 
 #### The useDispatch() Hook
 
@@ -567,10 +569,15 @@ import { useDispatch } from 'react-redux'
 
 ```jsx
 //within the component defintion
+const [fullName, setFullName] = useState('')
+const [id, setId] = useState('')
 const dispatch = useDispatch()
 function handleClick() {
-  dispatch(createCustomer('Jilian', nanoid()))
+  dispatch(createCustomer(fullName, id))
 }
 ```
 
 Notice how we called `useDispatch()` to obtain a reference to the Redux store `dispatch()` function and assigns it to `dispatch` and dispatched an action using `dispatch()` with an action creators as the argument.
+With this setup, if we fill out the form `Create new customer` and click on the button `Create new customer`, the customer's name will be displayed:
+
+![Dispatch-action](./completed/src/assets/dispatch-action.gif)

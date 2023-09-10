@@ -5,11 +5,12 @@ import { nanoid } from 'nanoid'
 
 function CreateCustomer() {
   const [fullName, setFullName] = useState('')
-  const [nationalId, setNationalId] = useState('')
+  const [id, setId] = useState('')
   const dispatch = useDispatch()
 
   function handleClick() {
-    dispatch(createCustomer('Jilian', nanoid()))
+    if (!fullName || !id) return
+    dispatch(createCustomer(fullName, id))
   }
 
   return (
@@ -25,10 +26,7 @@ function CreateCustomer() {
         </div>
         <div>
           <label>National ID</label>
-          <input
-            value={nationalId}
-            onChange={(e) => setNationalId(e.target.value)}
-          />
+          <input value={id} onChange={(e) => setId(e.target.value)} />
         </div>
         <button onClick={handleClick}>Create new customer</button>
       </div>
