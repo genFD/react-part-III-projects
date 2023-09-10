@@ -581,3 +581,171 @@ Notice how we called `useDispatch()` to obtain a reference to the Redux store `d
 With this setup, if we fill out the form `Create new customer` and click on the button `Create new customer`, the customer's name will be displayed:
 
 ![Dispatch-action](./completed/src/assets/dispatch-action.gif)
+
+In `app.jsx`, let's use our newfound knowledge to conditionnally render `<Customer />`, `<AccountOperations />` and `<BalanceDisplay />`:
+
+- If there's a customer's name in the the store we should display `<Customer />`, `<AccountOperations />` and `<BalanceDisplay />`
+- If not then we should only display `<CreateCustomer />`
+
+the first step would be to read the customer's name from the store, we can use `useSelector()` to accomplish this..
+
+```jsx
+//within the component defintion
+const fullName = useSelector((state) => state.customer.fullName)
+```
+
+...and then use the ternary operator to conditionnally render the components :
+
+```jsx
+//in the return statement
+
+{
+  !fullName ? (
+    <CreateCustomer />
+  ) : (
+    <>
+      <Customer />
+      <AccountOperations />
+      <BalanceDisplay />
+    </>
+  )
+}
+```
+
+The result :
+
+![Dispatch-action](./completed/src/assets/cond-compo-redux.gif)
+
+To keep practicing dispatching actions, let's work on the `<AccountOperations />` component.
+`<AccountOperations />` responsibility is to allow the user to make different operations in his account such as :
+
+- Making Deposit
+- Withdrawing money
+- Requesting a loan
+- Paying a loan off
+
+We've created 4 event handlers where we are going to dispatch these actions :
+
+- handleDeposit()
+- handleWithdrawal()
+- handleRequestLoan()
+- handlePayLoan()
+
+The first step is to be able to read the balance from the store.
+In `<BalanceDisplay/>` component we could write :
+
+```jsx
+// within the component definition
+const balance = useSelector((state) => state.account.balance)
+// in the return statement
+return <div className="balance">{formatCurrency(balance)}</div>
+```
+
+The balance should be `0`
+
+![Dispatch-action](./completed/src/assets/balance-reset.png)
+
+Back in `<AccountOperations />`, inside `handleDeposit()`, we can dispatch an action with `useDispatch()`
+
+```jsx
+import { useDispatch } from 'react-redux'
+import { deposit } from './accountSlice'
+
+// within the component definition
+const [depositAmount, setDepositAmount] = useState('')
+...
+const dispatch = useDispatch()
+
+function handleDeposit() {
+    if (!depositAmount) return
+    dispatch(deposit(depositAmount))
+    setDepositAmount('')
+  }
+```
+
+Notice how we :
+
+- Imported useDispatch from `react-redux` and deposit (the action creator) from `accountSlice`.
+- Created a state variable that holds a reference to the amount enter by the user
+- Created a dispatch variable that holds the reference to the Redux store dispatch function
+- Wrote an `if statement` which is a safe guard to prevent errors (deposit `$0` for example)
+- Dispatching an action using `dispatch()` with `deposit()`, which accepts the amount entered by the user saved in `depositAmount`.
+- reset `depositAmount` state variable back to it's initial value
+
+When you run the application you should be able to make deposit in the account.
+
+![make deposit](./completed/src/assets/makedeposit.gif)
+
+We will repeat the same process for `handleWithdrawal()`, `handleRequestLoan()`, `handlePayLoan()`, but first let's make sure we're able to display the loan amount and the loan purpose.
+using `useSelector()` we're going to extract the `balance`, `loan` and `loanPurpose` from the store
+
+```jsx
+// within the component definition
+const {
+  balance,
+  loan,
+  loanPurpose: currentLoanPurpose,
+} = useSelector((store) => store.account)
+```
+
+In the return statement we could write the following, to conditionnally render the request loan section and display the loan and loan purpose. We only want to display this section if the user requests a loan :
+
+```jsx
+// in the return statement
+{
+  loan > 0 && (
+    <div>
+      <span>
+        Pay back ${loan} ({currentLoanPurpose})
+      </span>
+      <button onClick={handlePayLoan}>Pay loan</button>
+    </div>
+  )
+}
+```
+
+and now our event handlers :
+
+```jsx
+function handleWithdrawal() {
+  if (!withdrawalAmount || withdrawalAmount > balance) return // prevent withdrawing an amount greater than the available balance
+  dispatch(withdraw(withdrawalAmount))
+  setWithdrawalAmount('')
+}
+
+function handleRequestLoan() {
+  if (!loanAmount || !loanPurpose) return
+  dispatch(requestLoan(loanAmount, loanPurpose))
+  setLoanAmount('')
+  setLoanPurpose('')
+}
+
+function handlePayLoan() {
+  dispatch(payLoan())
+}
+```
+
+We should be able to withdraw, request a loan and pay it back.
+
+![requestLoanandWithdraw](./completed/src/assets/request-withdraw.gif)
+
+#### Middleware and Thunks
+
+Let's continue our journey learning redux with `Middleware` and `Thunks`.
+We haven’t covered one of the most common challenges in app development: **making asynchronous requests**.
+
+_What is Redux Middleware?_
+
+The problem is with a basic Redux store, we can only do `synchronous` updates. When an action is dispatched, it is immediately processed by a reducer, which updates the store accordingly. But when developing applications, we often want to perform asynchronous operations (such as making API calls) and update the state based on the results.
+
+As the name suggests, `middleware` is the code that runs in the middle—usually between a framework receiving a request and producing a response. In `Redux`, `middleware` runs between when an action is dispatched and when that action is passed along to the reducer. `Middleware` intercepts actions after they are dispatched and before they are passed along to the reducer.
+Some common tasks that middleware performs include logging, caching, adding auth tokens to request headers, crash reporting, routing, and making asynchronous requests for data.
+
+You can add any of these functionalities to your apps by using popular open-source middleware. Of course, you can also write your own middleware to solve problems that are specific to your application and its architecture.
+
+_What is Redux thunk?_
+
+he most flexible and popular ways to add asynchronous functionality to Redux involves using thunks. A thunk is a higher-order function that wraps the computation we want to perform later.
+A thunk is a higher-order function that wraps the computation we want to perform later.
+
+_How to make API call with redux thunks?_
