@@ -1,12 +1,14 @@
-import { combineReducers, createStore } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 import customerReducer from './features/customer/customerSlice'
 import accountReducer from './features/account/accountSlice'
 
-const rootReducer = combineReducers({
-  account: accountReducer,
-  customer: customerReducer,
-})
+const options = {
+  reducer: {
+    customer: customerReducer,
+    account: accountReducer,
+  },
+}
 
-const store = createStore(rootReducer)
+const store = configureStore(options)
 
 export default store
